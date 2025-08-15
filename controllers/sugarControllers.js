@@ -1,11 +1,19 @@
-const { API } = require('../services/quickBookServices')
+const  API  = require('../services/quickBookServices')
 
-handleSugarWebhook = async (req, res) => {
+const handleSugarWebhook = async (req, res) => {
   try {
-    const data = req.body;
-    console.log("Received webhook data from SugarCRM:", JSON.stringify(data, null, 2));
+    const rawData = req.body.toString('utf8');
+    console.log("Received webhook data from SugarCRM:", JSON.stringify(rawData, null, 2));
 
-    const accountName = data?.data?.attributes?.name;
+    if (!rawData){
+      console.log("Empty data was received: ")
+      res.status(404).json({ messsage: "Empty webhook payload "})
+    }
+    
+    const data = JSON.parse(rawData)
+    console.log("Parsed webhook data from SugarCRM:", JSON.stringify(data, null, 2));
+
+    const accountName = data?.data?.name;
     if (!accountName) {
       console.log("Account Name Not found ")
       return res.status(400).json({message: "Account name not found" });
@@ -29,4 +37,6 @@ handleSugarWebhook = async (req, res) => {
   }
 };
 
-module.exports =  handleSugarWebhook 
+
+module.exports = handleSugarWebhook; 
+

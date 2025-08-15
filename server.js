@@ -1,10 +1,12 @@
 const express = require('express');
 const dotenv = require('dotenv')
 const sugarRoutes = require('./routes/sugarRoutes');
+const bodyParser = require('body-parser')
 dotenv.config();
 
 const app = express();
-app.use(express.json());
+//app.use(express.json());
+app.use(bodyParser.raw({ type: '*/*' }));
 
 // Routes
 app.use('/', sugarRoutes);
@@ -13,7 +15,6 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
-
 
 
 
