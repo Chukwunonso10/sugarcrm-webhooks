@@ -21,6 +21,40 @@ API.interceptors.request.use(
         return Promise.reject(error);
     }
 );
+console.log(process.env.CLIENT_ID)
+console.log(process.env.CLIENT_SECRET)
+API.interceptors.response.use(
+    (response)=> {
+        return response
+    },
+    async (error)=>{
+        if (error.response && error.response.status === 401){
+            console.log("Access token expired. refreshing...")
+            try {
+                const refreshToken = await axios.post("https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer",
+                    new URLSearchParams({ grant_type: "refresh_token", refresh_token: process.env.REFRESH_TOKEN}),
+                    { headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "Authorization": "Basic " + Buffer.from(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET).toString("base64")
+                    }}
+                 )
+
+                 const accessToken = refreshToken.data.access_token
+                 const refresh_token = refreshToken.data.refresh_token
+
+                 console.log("token refreshed successfully ")
+                  // Retry the failed request with new token
+                error.config.headers.Authorization = `Bearer ${accessToken}`;
+                return axios(error.config);
+
+            } catch (refreshError) {
+                console.error(" Refresh token failed:", refreshError.response?.data);
+                return Promise.reject(refreshError);
+            }
+        }
+        return Promise.reject(refreshError);
+    }
+)
 
 module.exports = API;
 
