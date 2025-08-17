@@ -3,6 +3,6 @@ const  handleSugarWebhook = require('../controllers/sugarControllers');
 
 const router = express.Router();
 
-router.post('/sugar-webhook', handleSugarWebhook);
+router.post('/', handleSugarWebhook);
 
 module.exports = router;

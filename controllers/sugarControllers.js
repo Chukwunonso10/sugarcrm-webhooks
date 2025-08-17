@@ -14,14 +14,14 @@ const handleSugarWebhook = async (req, res) => {
     console.log("Parsed webhook data from SugarCRM:", JSON.stringify(data, null, 2));
 
         // Extract all relevant fields from the webhook payload
-    const accountName = data?.name;
-    const companyName = data?.companyName; 
-    const firstName = data?.first_name;
-    const lastName = data?.last_name;
-    const phone = data?.phone_office;
-    const email = data?.email1;
-    const emailList = data?.email;
-    const accountType = data?.account_type;
+    const accountName = data?.data?.name;
+    const companyName = data?.data?.companyName; 
+    const firstName = data?.data?.first_name;
+    const lastName = data?.data?.last_name;
+    const phone = data?.data?.phone_office;
+    const email = data?.data?.email1;
+    const emailList = data?.data?.email;
+    const accountType = data?.data?.account_type;
   
     
     if (!accountName) {
@@ -60,7 +60,7 @@ const handleSugarWebhook = async (req, res) => {
 
     const response = await API.post('/customer', quickbooksPayload)
     console.log("New Account created in quickbooks")
-    res.status(201).json({ success: true, message: "New Customer Name successfully created ", response: res.data})
+    res.status(200).json({ success: true, message: "New Customer Name successfully created ", response: res.data})
   }
 
   catch (error) {

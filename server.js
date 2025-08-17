@@ -9,7 +9,7 @@ const app = express();
 app.use(bodyParser.raw({ type: '*/*' }));
 
 // Routes
-app.use('/', sugarRoutes);
+app.use('/sugar-webhook', sugarRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
