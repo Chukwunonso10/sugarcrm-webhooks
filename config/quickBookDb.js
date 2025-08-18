@@ -1,4 +1,11 @@
-const QUICKBOOKS_API_URL = `https://sandbox-quickbooks.api.intuit.com/v3/company/${process.env.QUICKBOOKS_REALM_ID}/customer`;
+const mongoose = require('mongoose')
 
-module.exports = QUICKBOOKS_API_URL
+const connectDB = async ()=> {
+    mongoose.connect(process.env.MONGO_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    }).then(()=>console.log('Database Connection was successsful'))
+    .catch((error)=> console.error('connection failed', error.message))
+}
 
+module.exports = connectDB

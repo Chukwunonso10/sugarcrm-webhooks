@@ -1,8 +1,10 @@
 const express = require('express');
 const dotenv = require('dotenv')
 const sugarRoutes = require('./routes/sugarRoutes');
+const connectDB = require('./config/quickBookDb')
 //const bodyParser = require('body-parser')
 dotenv.config();
+connectDB()
 
 const app = express();
 app.use(express.json());
