@@ -2,16 +2,19 @@ const  API  = require('../services/quickBookServices')
 
 const handleSugarWebhook = async (req, res) => {
   try {
-    const rawData = req.body.toString('utf8');
-    console.log("Received webhook data from SugarCRM:", rawData);
+    //const rawData = req.body.toString('utf8')
+    const data = req.body;
+    //console.log("Received webhook data from SugarCRM:", rawData);
+    console.log("Received webhook data from SugarCRM:", data);
 
-    if (!rawData){
+    if (!data){
       console.log("Empty data was received: ")
       res.status(404).json({ messsage: "Empty webhook payload "})
     }
     
-    const data = JSON.parse(rawData)
-    console.log("Parsed webhook data from SugarCRM:", JSON.stringify(data, null, 2));
+    //const data = JSON.parse(rawData)
+    //console.log("Parsed webhook data from SugarCRM:", JSON.stringify(data, null, 2));
+    console.log("Parsed webhook data from SugarCRM:", data);
 
         // Extract all relevant fields from the webhook payload
     const accountName = data?.data?.name;
@@ -72,8 +75,14 @@ const handleSugarWebhook = async (req, res) => {
   }
 };
 
+const healthCheck = async (req, res)=>{
+  res.status(200).json({ message: "server is onLine and Healthy "})
+}
 
-module.exports = handleSugarWebhook; 
+module.exports = {
+  handleSugarWebhook,
+  healthCheck
+} 
 
 
 

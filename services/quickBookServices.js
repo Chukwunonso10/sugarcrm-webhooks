@@ -1,9 +1,10 @@
 const axios = require('axios');
-const dotenv = require('dotenv')
+const dotenv = require('dotenv');
+const { all } = require('../routes/sugarRoutes');
 dotenv.config()
 
 // The base URL for the QuickBooks API.
-const QUICKBOOKS_BASE_URL = `https://sandbox-quickbooks.api.intuit.com/v3/company/${process.env.QUICKBOOKS_REALM_ID}`;
+const QUICKBOOKS_BASE_URL = `https://quickbooks.api.intuit.com/v3/company/${process.env.QUICKBOOKS_REALM_ID}`;
 
 const API = axios.create({
     baseURL: QUICKBOOKS_BASE_URL
@@ -21,8 +22,7 @@ API.interceptors.request.use(
         return Promise.reject(error);
     }
 );
-console.log(process.env.CLIENT_ID)
-console.log(process.env.CLIENT_SECRET)
+
 API.interceptors.response.use(
     (response)=> {
         return response
@@ -41,6 +41,9 @@ API.interceptors.response.use(
 
                  const accessToken = refreshToken.data.access_token
                  const refresh_token = refreshToken.data.refresh_token
+                    //store in-memory
+                 process.env.QUICKBOOKS_ACCESS_TOKEN = accessToken
+                 process.env.REFRESH_TOKEN = refresh_token
 
                  console.log("token refreshed successfully ")
                   // Retry the failed request with new token
@@ -52,9 +55,15 @@ API.interceptors.response.use(
                 return Promise.reject(refreshError);
             }
         }
-        return Promise.reject(refreshError);
+        return Promise.reject(error);
     }
 )
 
 module.exports = API;
+
+
+
+
+
+
 

@@ -1,15 +1,16 @@
 const express = require('express');
 const dotenv = require('dotenv')
 const sugarRoutes = require('./routes/sugarRoutes');
-const bodyParser = require('body-parser')
+//const bodyParser = require('body-parser')
 dotenv.config();
 
 const app = express();
-//app.use(express.json());
-app.use(bodyParser.raw({ type: '*/*' }));
+app.use(express.json());
+//app.use(bodyParser.raw({ type: '*/*' }));
 
 // Routes
 app.use('/sugar-webhook', sugarRoutes);
+app.use('/health', sugarRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
