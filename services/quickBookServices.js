@@ -53,14 +53,12 @@ API.interceptors.response.use(
             
                 const newAccessToken = refreshTokenResponse.data.access_token
                 const newRefreshToken = refreshTokenResponse.data.refresh_token
-            //store in-memory
-            //  process.env.QUICKBOOKS_ACCESS_TOKEN = accessToken
-            //  process.env.REFRESH_TOKEN = refresh_token
-            await Token.findOneAndUpdate({}, {accessToken: newAccessToken, refreshToken: newRefreshToken}, {new: true, upsert: true})
+           
+                await Token.findOneAndUpdate({}, {accessToken: newAccessToken, refreshToken: newRefreshToken}, {new: true, upsert: true})
             
-            console.log("token refreshed successfully ")
-            // Retry the failed request with new token
-            error.config.headers.Authorization = `Bearer ${newAccessToken}`;
+                console.log("token refreshed successfully ")
+                // Retry the failed request with new token
+                error.config.headers.Authorization = `Bearer ${newAccessToken}`;
                 return axios(error.config);
 
             } catch (refreshError) {
